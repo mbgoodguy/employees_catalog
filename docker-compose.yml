@@ -1,0 +1,26 @@
+services:
+  web-app:
+    build:
+      context: .
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./employees_catalog_app:/employees_catalog_app
+    environment:
+      - DB_HOST=database
+      - DB_NAME=employees_app
+      - DB_USER=employees_owner
+      - DB_PASS=employees_pwd
+
+    command: >
+      sh -c 'python manage.py runserver 0.0.0.0:8000'
+
+    depends_on:
+      - database
+
+  database:
+    image: postgres:14.6-alpine
+    environment:
+      - POSTGRES_DB=employees_app
+      - POSTGRES_USER=employees_owner
+      - POSTGRES_PASSWORD=employees_pwd
